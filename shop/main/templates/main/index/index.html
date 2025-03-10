@@ -1,0 +1,58 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+  Имя магазина
+{% endblock %}
+
+{% block content %}
+  <body>
+    <form method="GET" action="{% url 'main:index' %}">
+      <input type="text" name="q" placeholder="Search products..." />
+      <input type="hidden" name="tab" value="{{ tab }}" />
+      <button type="submit">Search</button>
+    </form>
+
+    {% if message %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+
+    {% if tab == 'products' %}
+      <div class="container" id="Products">
+        {% for product in products %}
+          <div class="card one-product">
+            <a href="{{ product.get_absolute_url }}">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              <h1>{{ product.name }}</h1>
+              <p>{{ product.price }} ₽</p>
+              <p>
+                {{ product.description|slice:':20' }}{% if product.description|length > 20 %}...{% endif %}
+              </p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif tab == 'services' %}
+      <div class="container" id="Services">
+        {% for service in services %}
+          <div class="card one-service">
+            <a href="{{ service.get_absolute_url }}">
+              <h1>{{ service.name }}</h1>
+              <p>{{ service.price }} ₽</p>
+              <p>
+                {{ service.description|slice:':20' }}{% if service.description|length > 20 %}...{% endif %}
+              </p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif tab == 'about' %}
+      {% for item in about %}
+        <div class="about">
+          <h1>{{ item.name }}</h1>
+          <p>{{ item.description }}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </body>
+{% endblock %}
